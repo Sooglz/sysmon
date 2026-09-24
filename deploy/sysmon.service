@@ -1,0 +1,21 @@
+[Unit]
+Description=SysMon Monitoring Agent
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/sysmon --config /etc/sysmon/sysmon.yaml
+Restart=always
+RestartSec=5
+User=nobody
+Group=nogroup
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sysmon
+
+[Install]
+WantedBy=multi-user.target
