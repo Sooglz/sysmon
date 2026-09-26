@@ -1,3 +1,4 @@
+// Package collector 从 /proc 与系统调用采集 CPU、内存、磁盘指标。
 package collector
 
 import (
@@ -11,6 +12,7 @@ import (
 	"time"
 )
 
+// Metrics 表示一次采集得到的系统指标快照。
 type Metrics struct {
 	CPUPercent    float64 `json:"cpu_percent"`
 	MemoryPercent float64 `json:"memory_percent"`
@@ -24,6 +26,7 @@ var (
 	lastIdle  uint64
 )
 
+// Collect 采集一次 CPU、内存和磁盘指标。
 func Collect(diskPath string) (Metrics, error) {
 	cpu, err := cpuPercent()
 	if err != nil {
@@ -53,7 +56,7 @@ func cpuPercent() (float64, error) {
 	if err != nil {
 		return 0, err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	scanner := bufio.NewScanner(f)
 	if !scanner.Scan() {
@@ -98,7 +101,7 @@ func memPercent() (float64, error) {
 	if err != nil {
 		return 0, err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	var total, available uint64
 	scanner := bufio.NewScanner(f)

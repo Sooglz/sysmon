@@ -1,3 +1,4 @@
+// Command sysmon 是轻量级 Linux 系统资源监控代理的入口。
 package main
 
 import (
@@ -80,11 +81,11 @@ func main() {
 	}()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 	})
-	mux.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/metrics", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(current.Load().(collector.Metrics))
 	})

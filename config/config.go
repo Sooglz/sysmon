@@ -1,3 +1,4 @@
+// Package config 负责 SysMon 配置文件的解析、默认值与校验。
 package config
 
 import (
@@ -7,12 +8,14 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Config 表示 SysMon 的运行配置。
 type Config struct {
 	Interval   int    `yaml:"interval"`
 	ListenAddr string `yaml:"listen_addr"`
 	DiskPath   string `yaml:"disk_path"`
 }
 
+// Default 返回一份带有默认值的配置。
 func Default() Config {
 	return Config{
 		Interval:   5,
@@ -21,6 +24,7 @@ func Default() Config {
 	}
 }
 
+// Load 从指定路径读取并解析 YAML 配置文件。
 func Load(path string) (Config, error) {
 	cfg := Default()
 	data, err := os.ReadFile(path)
@@ -33,6 +37,7 @@ func Load(path string) (Config, error) {
 	return cfg, nil
 }
 
+// Validate 校验配置项的合法性。
 func (c Config) Validate() error {
 	if c.Interval <= 0 {
 		return fmt.Errorf("interval must be > 0")
