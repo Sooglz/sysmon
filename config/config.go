@@ -25,8 +25,10 @@ func Default() Config {
 }
 
 // Load 从指定路径读取并解析 YAML 配置文件。
+// 配置文件路径由管理员通过 --config 参数指定，属本地可信输入。
 func Load(path string) (Config, error) {
 	cfg := Default()
+	// #nosec G304 -- path 来自命令行 --config，由管理员控制，非用户输入
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return cfg, fmt.Errorf("read config %s: %w", path, err)

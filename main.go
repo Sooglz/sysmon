@@ -90,7 +90,14 @@ func main() {
 		_ = json.NewEncoder(w).Encode(current.Load().(collector.Metrics))
 	})
 
-	srv := &http.Server{Addr: cfg.ListenAddr, Handler: mux}
+	srv := &http.Server{
+		Addr:              cfg.ListenAddr,
+		Handler:           mux,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
 	go func() {
 		logger.Info("sysmon started", "addr", cfg.ListenAddr, "interval", cfg.Interval)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
