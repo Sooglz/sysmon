@@ -1,0 +1,4 @@
+# SysMon 配置文件
+interval: 5          # 采集间隔，单位秒
+listen_addr: "127.0.0.1:9100"
+disk_path: "/"
